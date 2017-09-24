@@ -46,7 +46,8 @@ impl<'grammar> Validator<'grammar> {
         let allowed_names = vec![intern(LALR),
                                  intern(TABLE_DRIVEN),
                                  intern(RECURSIVE_ASCENT),
-                                 intern(TEST_ALL)];
+                                 intern(TEST_ALL),
+								 intern(PUSH)];
         for annotation in &self.grammar.annotations {
             if !allowed_names.contains(&annotation.id) {
                 return_err!(annotation.id_span,

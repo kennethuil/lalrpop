@@ -382,6 +382,7 @@ fn emit_recursive_ascent(session: &Session, grammar: &r::Grammar, report_file : 
                                                    start_nt,
                                                    &states,
                                                    "super",
+												   grammar.algorithm.api,
                                                    &mut rust)),
             r::LrCodeGeneration::TableDriven =>
                 try!(lr1::codegen::parse_table::compile(&grammar,
@@ -389,10 +390,11 @@ fn emit_recursive_ascent(session: &Session, grammar: &r::Grammar, report_file : 
                                                         start_nt,
                                                         &states,
                                                         "super",
+														grammar.algorithm.api,
                                                         &mut rust)),
 
             r::LrCodeGeneration::TestAll =>
-                try!(lr1::codegen::test_all::compile(&grammar, user_nt, start_nt, &states, &mut rust)),
+                try!(lr1::codegen::test_all::compile(&grammar, user_nt, start_nt, &states, grammar.algorithm.api, &mut rust)),
         }
 
         rust!(rust,

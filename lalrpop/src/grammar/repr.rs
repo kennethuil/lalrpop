@@ -80,9 +80,16 @@ pub struct NonterminalData {
     pub productions: Vec<Production>,
 }
 
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+pub enum ParserApi {
+	Pull,
+	Push
+}
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Algorithm {
     pub lalr: bool,
+	pub api: ParserApi,
     pub codegen: LrCodeGeneration,
 }
 
@@ -559,6 +566,7 @@ impl Default for Algorithm {
     fn default() -> Self {
         Algorithm {
             lalr: false,
+			api: ParserApi::Pull,
             codegen: LrCodeGeneration::TableDriven,
         }
     }

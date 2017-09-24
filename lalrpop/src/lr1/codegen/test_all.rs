@@ -2,7 +2,7 @@
 //!
 //! [recursive ascent]: https://en.wikipedia.org/wiki/Recursive_ascent_parser
 
-use grammar::repr::{Grammar, NonterminalString, TypeParameter};
+use grammar::repr::{Grammar, NonterminalString, TypeParameter, ParserApi};
 use lr1::core::*;
 use rust::RustWrite;
 use std::io::{self, Write};
@@ -14,12 +14,14 @@ pub fn compile<'grammar, W: Write>(grammar: &'grammar Grammar,
                                    user_start_symbol: NonterminalString,
                                    start_symbol: NonterminalString,
                                    states: &[LR1State<'grammar>],
+								   api: ParserApi,
                                    out: &mut RustWrite<W>)
                                    -> io::Result<()> {
     let mut ascent = CodeGenerator::new_test_all(grammar,
                                                  user_start_symbol,
                                                  start_symbol,
                                                  states,
+												 api,
                                                  out);
     ascent.write()
 }
@@ -31,6 +33,7 @@ impl<'ascent, 'grammar, W: Write> CodeGenerator<'ascent, 'grammar, W, TestAll> {
                     user_start_symbol: NonterminalString,
                     start_symbol: NonterminalString,
                     states: &'ascent [LR1State<'grammar>],
+					api: ParserApi,
                     out: &'ascent mut RustWrite<W>)
                     -> Self {
         CodeGenerator::new(grammar,
@@ -40,6 +43,7 @@ impl<'ascent, 'grammar, W: Write> CodeGenerator<'ascent, 'grammar, W, TestAll> {
                            out,
                            true,
                            "super",
+						   api,
                            TestAll)
     }
 
@@ -53,6 +57,7 @@ impl<'ascent, 'grammar, W: Write> CodeGenerator<'ascent, 'grammar, W, TestAll> {
                                         this.start_symbol,
                                         this.states,
                                         "super::super::super",
+										this.api,
                                         this.out));
             rust!(this.out,
                   "pub use self::{}parse{}::parse_{};",
@@ -67,6 +72,7 @@ impl<'ascent, 'grammar, W: Write> CodeGenerator<'ascent, 'grammar, W, TestAll> {
                                              this.start_symbol,
                                              this.states,
                                              "super::super::super",
+											 this.api,
                                              this.out));
             rust!(this.out,
                   "pub use self::{}parse{}::parse_{};",

@@ -39,6 +39,8 @@ pub struct CodeGenerator<'codegen, 'grammar: 'codegen, W: Write + 'codegen, C> {
     pub custom: C,
 
     pub repeatable: bool,
+	
+	pub api: ParserApi,
 }
 
 impl<'codegen, 'grammar, W: Write, C> CodeGenerator<'codegen, 'grammar, W, C> {
@@ -49,6 +51,7 @@ impl<'codegen, 'grammar, W: Write, C> CodeGenerator<'codegen, 'grammar, W, C> {
                out: &'codegen mut RustWrite<W>,
                repeatable: bool,
                action_module: &str,
+			   api: ParserApi,
                custom: C)
                -> Self {
         CodeGenerator {
@@ -61,6 +64,7 @@ impl<'codegen, 'grammar, W: Write, C> CodeGenerator<'codegen, 'grammar, W, C> {
             out: out,
             custom: custom,
             repeatable: repeatable,
+			api: api,
             action_module: action_module.to_string(),
         }
     }

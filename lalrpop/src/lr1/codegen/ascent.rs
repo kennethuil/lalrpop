@@ -5,7 +5,7 @@
 use collections::{Multimap, Set};
 use grammar::parse_tree::WhereClause;
 use grammar::repr::{Grammar, NonterminalString, Production, Symbol, TerminalString, TypeParameter,
-                    TypeRepr};
+                    TypeRepr, ParserApi};
 use lr1::core::*;
 use lr1::lookahead::Token;
 use lr1::state_graph::StateGraph;
@@ -21,6 +21,7 @@ pub fn compile<'grammar, W: Write>(grammar: &'grammar Grammar,
                                    start_symbol: NonterminalString,
                                    states: &[LR1State<'grammar>],
                                    action_module: &str,
+								   api: ParserApi,
                                    out: &mut RustWrite<W>)
                                    -> io::Result<()> {
     let graph = StateGraph::new(&states);
@@ -30,6 +31,7 @@ pub fn compile<'grammar, W: Write>(grammar: &'grammar Grammar,
                                                &graph,
                                                states,
                                                action_module,
+											   api,
                                                out);
     ascent.write()
 }
@@ -118,6 +120,7 @@ impl<'ascent, 'grammar, W: Write> CodeGenerator<'ascent,
                   graph: &'ascent StateGraph,
                   states: &'ascent [LR1State<'grammar>],
                   action_module: &str,
+				  api: ParserApi,
                   out: &'ascent mut RustWrite<W>)
                   -> Self {
         // The nonterminal type needs to be parameterized by all the
@@ -163,6 +166,7 @@ impl<'ascent, 'grammar, W: Write> CodeGenerator<'ascent,
                            out,
                            false,
                            action_module,
+						   api,
                            RecursiveAscent {
                                graph: graph,
                                state_inputs: state_inputs,

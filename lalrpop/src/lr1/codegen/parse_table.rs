@@ -20,6 +20,7 @@ pub fn compile<'grammar, W: Write>(grammar: &'grammar Grammar,
                                    start_symbol: NonterminalString,
                                    states: &[LR1State<'grammar>],
                                    action_module: &str,
+								   api: ParserApi,
                                    out: &mut RustWrite<W>)
                                    -> io::Result<()> {
     let mut table_driven = CodeGenerator::new_table_driven(grammar,
@@ -27,6 +28,7 @@ pub fn compile<'grammar, W: Write>(grammar: &'grammar Grammar,
                                                            start_symbol,
                                                            states,
                                                            action_module,
+														   api,
                                                            out);
     table_driven.write()
 }
@@ -250,6 +252,7 @@ impl<'ascent, 'grammar, W: Write> CodeGenerator<'ascent, 'grammar, W, TableDrive
                         start_symbol: NonterminalString,
                         states: &'ascent [LR1State<'grammar>],
                         action_module: &str,
+						api: ParserApi,
                         out: &'ascent mut RustWrite<W>)
                         -> Self {
         // The nonterminal type needs to be parameterized by all the
@@ -303,6 +306,7 @@ impl<'ascent, 'grammar, W: Write> CodeGenerator<'ascent, 'grammar, W, TableDrive
                            out,
                            false,
                            action_module,
+						   api,
                            TableDriven {
                                symbol_type_params: symbol_type_params,
                                symbol_where_clauses: symbol_where_clauses,

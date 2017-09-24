@@ -23,6 +23,7 @@ lalrpop-test/src/expr_arena.rs
 lalrpop-test/src/expr_generic.rs
 lalrpop-test/src/expr_intern_tok.rs
 lalrpop-test/src/expr_lalr.rs
+lalrpop-test/src/expr_push.rs
 lalrpop-test/src/generics_issue_104.rs
 lalrpop-test/src/inline.rs
 lalrpop-test/src/intern_tok.rs
